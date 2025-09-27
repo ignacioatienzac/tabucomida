@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Representar o explicar?</title>
+    <style>
+        /* Estilos generales del cuerpo */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #fcf8e3; /* Fondo crema claro */
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centra los bloques principales horizontalmente */
+            justify-content: center; /* Centra verticalmente en la pantalla */
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            
+            /* IMAGEN DE FONDO */
+            background-image: url('https://i.imgur.com/CqZG3sq.png'); /* Tu imagen */
+            background-repeat: no-repeat;
+            background-position: right bottom; /* Esquina inferior derecha */
+            background-size: auto 65vh; /* Ajusta la altura de la imagen, auto para el ancho */
+            background-attachment: fixed; /* Para que la imagen se quede fija al hacer scroll (si lo hubiera) */
+            opacity: 0.7; /* Opacidad de la imagen de fondo para que no opaque el contenido */
+            z-index: 1; /* Asegura que la imagen esté detrás del contenido principal */
+            overflow-x: hidden; /* Evita scroll horizontal si la imagen es muy ancha */
+        }
+
+        /* Contenedor del título e instrucciones */
+        .game-header {
+            background-color: #ffffff;
+            padding: 1.5em 2em;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 900px; /* Ancho máximo para el encabezado */
+            margin-bottom: 2em; /* Espacio entre el encabezado y el contenido principal */
+            text-align: center;
+            z-index: 10; /* Asegura que esté por encima de la imagen de fondo */
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 0.8em;
+            font-size: 2.5em;
+        }
+
+        /* LISTA DE INSTRUCCIONES ACTUALIZADA */
+        .instructions {
+            text-align: left;
+            margin: 0 auto 1em auto;
+            padding-left: 0;
+            list-style: none;
+            line-height: 1.8;
+            color: #555;
+            font-size: 1.1em;
+            max-width: 600px; /* Centra la lista de instrucciones */
+        }
+
+        .instructions li {
+            margin-bottom: 0.8em;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .instructions li span.emoji {
+            margin-right: 10px;
+            font-size: 1.2em;
+            min-width: 25px; /* Para alinear bien el texto si el emoji es grande */
+        }
+
+        .color-azul { color: #007bff; font-weight: bold; }
+        .color-verde { color: #28a745; font-weight: bold; }
+
+        /* Contenedor principal para el juego y la imagen (ahora solo el juego) */
+        .main-content {
+            display: flex;
+            justify-content: center;
+            align-items: center; 
+            gap: 2em; 
+            width: 100%;
+            max-width: 1100px; 
+            z-index: 10; /* Asegura que esté por encima de la imagen de fondo */
+        }
+        
+        /* Área de juego (ocupa todo el main-content disponible) */
+        .game-area {
+            flex: 1; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 500px; 
+            margin-right: 50%; /* Esto es clave: deja espacio a la derecha para que la imagen se vea bien */
+            transform: translateX(-25%); /* Ajusta más a la izquierda */
+            z-index: 10;
+        }
+
+        /* Contenedor de la tarjeta */
+        #tarjeta {
+            background-color: #ffffff;
+            border: 2px dashed #ccc;
+            border-radius: 15px;
+            width: 100%;
+            min-height: 300px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            transition: background-color 0.4s ease, border-color 0.4s ease;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+
+        #textoTarjeta {
+            font-size: 2.8em;
+            font-weight: bold;
+            color: #333;
+            text-transform: uppercase;
+            text-align: center;
+            word-break: break-word;
+        }
+
+        /* Botón interactivo */
+        #siguiente {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            font-size: 1.4em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            margin-top: 2em; 
+        }
+
+        #siguiente:hover { background-color: #218838; }
+        #siguiente:active { transform: scale(0.98); }
+        
+        /* El image-area ya no es necesario como contenedor separado */
+        /* .image-area { display: none; } */
+
+
+        /* Media queries para responsividad */
+        @media (max-width: 992px) { /* Ajuste para pantallas medianas */
+            body {
+                background-size: auto 50vh; /* Reduce el tamaño de la imagen de fondo */
+                background-position: center bottom; /* Centra la imagen en la parte inferior */
+                opacity: 0.8; /* Aumenta un poco la opacidad si está más visible */
+            }
+            .game-area {
+                margin-right: 0; /* No hay margen a la derecha */
+                transform: translateX(0); /* Vuelve a su posición original */
+                max-width: 90%; /* Ocupa más espacio horizontal */
+            }
+            .game-header {
+                max-width: 90%;
+            }
+            #tarjeta { min-height: 250px; }
+            #textoTarjeta { font-size: 2.5em; }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                background-size: auto 40vh; /* Más pequeña en tablets */
+                background-position: center bottom;
+                opacity: 0.9;
+            }
+            h1 { font-size: 2em; }
+            .game-header { padding: 1em 1.5em; margin-bottom: 1.5em; }
+            .instructions { font-size: 1em; max-width: 100%; }
+            #tarjeta { padding: 20px; min-height: 200px; }
+            #textoTarjeta { font-size: 2em; }
+            #siguiente { padding: 15px 25px; font-size: 1.1em; margin-top: 1.5em; }
+        }
+
+        @media (max-width: 480px) {
+            body { 
+                padding: 10px; 
+                background-size: auto 30vh; /* Aún más pequeña en móviles */
+                background-position: center bottom;
+                opacity: 1; /* Totalmente opaca */
+            }
+            h1 { font-size: 1.8em; }
+            .game-header { padding: 0.8em 1em; }
+            .instructions { font-size: 0.9em; }
+            #textoTarjeta { font-size: 1.8em; }
+            #siguiente { padding: 12px 20px; font-size: 1em; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="game-header">
+        <h1>¿Representar o explicar?</h1>
+        <ul class="instructions">
+            <li><span class="emoji">👥</span> Grupos de 3 o 4 personas.</li>
+            <li><span class="emoji">👀</span> Solo un estudiante puede mirar la pantalla.</li>
+            <li><span class="emoji">👆</span> El estudiante hace click en “siguiente tarjeta”.</li>
+            <li><span class="emoji">🔵</span> Si la tarjeta tiene el fondo azul, tienes que representar la acción que aparece.</li>
+            <li><span class="emoji">🟢</span> Si el fondo es verde, tienes que explicarla sin decir ninguna de las palabras que aparecen en la tarjeta.</li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="game-area">
+            <div id="tarjeta">
+                <span id="textoTarjeta">¡Pulsa el botón para empezar!</span>
+            </div>
+            <button id="siguiente">Siguiente Tarjeta</button>
+        </div>
+        </div>
+
+    <script>
+        // --- CONFIGURACIÓN DE LAS TARJETAS ---
+        const tarjetasAzules = [
+            'HACER FOTOGRAFÍAS', 'JUGAR A LOS BOLOS', 'TOMAR UNA CERVEZA',
+            'VER UN PARTIDO DE FÚTBOL', 'PINTAR', 'MONTAR A CABALLO',
+            'PRACTICAR YOGA', 'IR EN BICI', 'BAILAR',
+            'IR AL GIMNASIO', 'TOCAR EL VIOLÍN', 'IR DE COPAS'
+        ].map(texto => ({ texto, color: '#b5d6ed', tipo: 'azul' }));
+
+        const tarjetasVerdes = [
+            'IR A UN RESTAURANTE', 'ESCUCHAR MÚSICA', 'LEER',
+            'VER SERIES', 'SALIR A CENAR', 'PARTICIPAR EN UNA CARRERA',
+            'JUGAR A LAS CARTAS', 'HACER SENDERISMO', 'IR AL CINE',
+            'PASAR UN RATO CON LOS AMIGOS', 'TOMAR UN CAFÉ', 'HACER SUBMARINISMO'
+        ].map(texto => ({ texto, color: '#bfee90', tipo: 'verde' }));
+
+        // --- LÓGICA DEL JUEGO (sin cambios) ---
+        const tarjetaDiv = document.getElementById('tarjeta');
+        const textoTarjetaSpan = document.getElementById('textoTarjeta');
+        const siguienteBtn = document.getElementById('siguiente');
+
+        let mazoCompleto = [...tarjetasAzules, ...tarjetasVerdes];
+        let mazoActual = [];
+        let historialTarjetas = [];
+
+        function barajarMazo() {
+            let mazoParaBarajar = [...mazoCompleto];
+            let indiceActual = mazoParaBarajar.length, valorTemporal, indiceAleatorio;
+            while (0 !== indiceActual) {
+                indiceAleatorio = Math.floor(Math.random() * indiceActual);
+                indiceActual -= 1;
+                valorTemporal = mazoParaBarajar[indiceActual];
+                mazoParaBarajar[indiceActual] = mazoParaBarajar[indiceAleatorio];
+                mazoParaBarajar[indiceAleatorio] = valorTemporal;
+            }
+            mazoActual = mazoParaBarajar;
+            historialTarjetas = [];
+            console.log("Mazo barajado. ¡Listo para jugar!");
+        }
+
+        function mostrarSiguienteTarjeta() {
+            if (mazoActual.length === 0) {
+                alert("¡Has completado todas las tarjetas! El mazo se barajará de nuevo.");
+                barajarMazo();
+            }
+
+            let tarjetaSeleccionada;
+            const ultimoTipo = historialTarjetas.length > 0 ? historialTarjetas[historialTarjetas.length - 1].tipo : null;
+            const penultimoTipo = historialTarjetas.length > 1 ? historialTarjetas[historialTarjetas.length - 2].tipo : null;
+
+            if (ultimoTipo && ultimoTipo === penultimoTipo) {
+                const tipoOpuesto = ultimoTipo === 'azul' ? 'verde' : 'azul';
+                const indiceOpuesto = mazoActual.findIndex(t => t.tipo === tipoOpuesto);
+                if (indiceOpuesto !== -1) {
+                    tarjetaSeleccionada = mazoActual.splice(indiceOpuesto, 1)[0];
+                } else {
+                    tarjetaSeleccionada = mazoActual.pop();
+                }
+            } else {
+                tarjetaSeleccionada = mazoActual.pop();
+            }
+
+            tarjetaDiv.style.backgroundColor = tarjetaSeleccionada.color;
+            tarjetaDiv.style.borderColor = tarjetaSeleccionada.color;
+            textoTarjetaSpan.textContent = tarjetaSeleccionada.texto;
+            historialTarjetas.push(tarjetaSeleccionada);
+
+            if (mazoActual.length === 0) {
+                siguienteBtn.textContent = 'Empezar de Nuevo';
+            } else {
+                siguienteBtn.textContent = 'Siguiente Tarjeta';
+            }
+        }
+
+        siguienteBtn.addEventListener('click', mostrarSiguienteTarjeta);
+        barajarMazo();
+    </script>
+
+</body>
+</html>
